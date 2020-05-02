@@ -1,16 +1,23 @@
 <?php
-    session_start();
+    require_once(__DIR__.'/database.php');
 
+    # Gebruikerssessie logica
+    session_start();
     if (isset($_GET['logout'])) {
         session_destroy();
         session_start();
     }
-
     if (isset($_POST['name'])) {
         $_SESSION['name'] = $_POST['name'];
     }
-
     var_dump($_SESSION);
+
+    # Connect met database
+    $db = Database::connect();
+    $tables = $db->getDatabaseTables();
+    if (empty($tables)) {
+        $db->createSchema();
+    }
 ?>
 
 <html>
@@ -42,6 +49,29 @@
         </form>
 
         <?php endif; ?>
+
+        <!-- Hier komt het overzicht van bestaande spellen -->
+        <h2>Bestaande potjes</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Gastheer</th>
+                    <th scope="col">Spelers</th>
+                    <th>Actie</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($db->getRooms() as $room): ?>
+                <tr>
+                    <td><?php echo $room['name']; ?></td>
+                    <td><?php echo $room['host']; ?></td>
+                    <td>TODO</td>
+                    <td><button>Meedoen!</button></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+            </table>
   
     </body>
 </html>
