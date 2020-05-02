@@ -1,12 +1,12 @@
 <?php
     session_start();
 
-    if ($_GET['logout']) {
+    if (isset($_GET['logout'])) {
         session_destroy();
         session_start();
     }
 
-    if ($_POST['name']) {
+    if (isset($_POST['name'])) {
         $_SESSION['name'] = $_POST['name'];
     }
 
