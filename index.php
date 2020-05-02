@@ -1,7 +1,17 @@
 <?php
-    var_dump(
-        $_POST
-    );
+    error_reporting(E_ALL);
+    session_start();
+
+    if ($_GET['logout']) {
+        session_destroy();
+        session_start();
+    }
+
+    if ($_POST['name']) {
+        $_SESSION['name'] = $_POST['name'];
+    }
+
+    var_dump($_SESSION);
 ?>
 <html>
     <head>
@@ -10,10 +20,22 @@
     <body>
         <h1>Finish Mee</h1>
 
+        <?php if (isset($_SESSION['name'])): ?>
+
+        <h2>Hallo <?php echo $_SESSION['name']; ?></h2>
+        <form action="index.php?logout=true" method="post">
+            <button type="submit" value="logout">Uitloggen</button>
+        </form>
+
+        <?php else: ?>
+
         <form action="index.php" method="post">
             <label for="name">Naam</label>
             <input name="name" type="text" />
             <button type="submit">versturen</button>
         </form>
+
+        <?php endif; ?>
+  
     </body>
 </html>
